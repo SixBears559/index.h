@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>任务契约 – 母狗进化篇</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: #111;
+    color: #fff;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    line-height: 1.6;
+  }
+  .screen {
+    display: none;
+    width: 100%;
+    max-width: 480px;
+    text-align: center;
+  }
+  .screen.active { display: block; }
+  .bg-dark {
+    background: linear-gradient(180deg, #1a0000 0%, #000 100%);
+    min-height: 100vh;
+    width: 100%;
+    position: fixed;
+    top: 0; left: 0; z-index: -1;
+  }
+  h1 {
+    font-size: 1.8rem;
+    color: #ff2222;
+    margin-bottom: 30px;
+    letter-spacing: 2px;
+    text-shadow: 0 0 10px rgba(255,0,0,0.6);
+  }
+  .content {
+    background: rgba(30,0,0,0.85);
+    border: 1px solid #660000;
+    border-radius: 12px;
+    padding: 24px 18px;
+    margin-bottom: 30px;
+    text-align: left;
+    font-size: 1rem;
+    color: #eee;
+  }
+  .btn {
+    display: block;
+    width: 100%;
+    padding: 16px;
+    font-size: 1.15rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    background: #cc0000;
+    color: #fff;
+    cursor: pointer;
+    margin-top: 12px;
+    transition: background 0.2s;
+  }
+  .btn:active { background: #990000; }
+  .btn-secondary {
+    background: #333;
+    border: 1px solid #555;
+  }
+  .white-bg {
+    background: #fff;
+    color: #111;
+    min-height: 100vh;
+    width: 100%;
+    position: fixed;
+    top: 0; left: 0; z-index: -1;
+  }
+  input[type="text"], input[type="tel"] {
+    width: 100%;
+    padding: 14px;
+    font-size: 1.1rem;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    margin-bottom: 16px;
+  }
+  label {
+    display: block;
+    text-align: left;
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+  .error {
+    color: #cc0000;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+    display: none;
+  }
+  .task-box {
+    background: #1a0000;
+    border: 1px solid #660000;
+    border-radius: 10px;
+    padding: 18px;
+    margin: 20px 0;
+    text-align: left;
+    font-size: 0.95rem;
+    max-height: 40vh;
+    overflow-y: auto;
+  }
+  .score {
+    font-size: 2.5rem;
+    color: #ff4444;
+    margin: 20px 0;
+    font-weight: bold;
+  }
+  .upload-area {
+    border: 2px dashed #666;
+    border-radius: 10px;
+    padding: 30px 15px;
+    margin: 20px 0;
+    background: #1a1a1a;
+  }
+  .file-name {
+    margin-top: 10px;
+    font-size: 0.9rem;
+    color: #aaa;
+    word-break: break-all;
+  }
+  .hidden { display: none !important; }
+  .progress-tip {
+    font-size: 0.85rem;
+    color: #888;
+    margin-top: 15px;
+  }
+</style>
+</head>
+<body>
+<div class="bg-dark" id="darkBg"></div>
+<div class="white-bg hidden" id="whiteBg"></div>
+
+<!-- 页面1：标题 -->
+<div class="screen active" id="page1">
+  <h1>任务契约<br>– 母狗进化篇</h1>
+  <button class="btn" onclick="goTo(2)">确 定</button>
+</div>
+
+<!-- 页面2：第一章 -->
+<div class="screen" id="page2">
+  <h1>第一章</h1>
+  <div class="content">
+    请认真阅读以下文字。这不是游戏，也不是一时兴起的玩法。这是你主动请求、自愿签署的契约。从这一刻起，你不再只是“想试试”，而是正式成为一只正在进化的小母狗。
+  </div>
+  <button class="btn" onclick="goTo(3)">确 定</button>
+</div>
+
+<!-- 页面3：终身契约 -->
+<div class="screen" id="page3">
+  <h1>母狗的终身契约</h1>
+  <div class="content">
+    我承认自己是一只渴望被调教、被约束、被使用的小母狗。我愿意从最基础的服从开始，一步步接受更强的规矩、更重的任务、更彻底的羞耻与疼痛。我明白：契约一旦生效，任务必须完成；完成得越干净、越彻底，我才配继续进化。我不会找借口，不会半途而废，不会在中途假装忘记自己是谁。<br><br>
+    <strong>签署即生效。</strong>
+  </div>
+  <button class="btn" onclick="goTo(4)">下一页</button>
+</div>
+
+<!-- 页面4：签署姓名和联系方式 -->
+<div class="screen" id="page4">
+  <h1 style="color:#111;">请签署姓名和联系方式</h1>
+  <div style="text-align:left; max-width:480px; margin:0 auto;">
+    <label for="playerName">姓名（必须是文字）</label>
+    <input type="text" id="playerName" placeholder="请输入你的名字" autocomplete="name">
+    <div class="error" id="nameError">名字必须是文字，不能为空</div>
+
+    <label for="playerContact">联系方式（必须是数字，至少8位）</label>
+    <input type="tel" id="playerContact" placeholder="请输入手机号或其他数字联系方式" inputmode="numeric" pattern="[0-9]*">
+    <div class="error" id="contactError">联系方式必须是纯数字且至少8位</div>
+  </div>
+  <button class="btn" onclick="submitSign()">我已经确定成为主人的母狗</button>
+</div>
+
+<!-- 页面5：主界面 / 随机任务 -->
+<div class="screen" id="page5">
+  <h1>主界面</h1>
+  <p style="margin-bottom:20px; color:#ccc;">你已正式成为主人的母狗。<br>点击下方按钮领取随机任务。</p>
+  <button class="btn" onclick="getRandomTask()">随机任务</button>
+  <p class="progress-tip">已完成任务会自动记录。中途退出下次进入会回到未完成页面。</p>
+</div>
+
+<!-- 页面6：任务详情 + 上传 -->
+<div class="screen" id="page6">
+  <h1>当前任务</h1>
+  <div class="task-box" id="taskText"></div>
+
+  <div class="upload-area">
+    <p style="margin-bottom:12px;">请从相册选择照片或视频完成任务</p>
+    <input type="file" id="fileInput" accept="image/*,video/*" style="width:100%;">
+    <div class="file-name" id="fileName"></div>
+  </div>
+
+  <button class="btn" id="uploadBtn" onclick="uploadTask()" disabled>上传并完成任务</button>
+  <button class="btn btn-secondary" onclick="goTo(5)" style="margin-top:10px;">返回主界面</button>
+</div>
+
+<!-- 页面7：完成打分 -->
+<div class="screen" id="page7">
+  <h1>任务完成</h1>
+  <p>系统已收到你的上传</p>
+  <div class="score" id="scoreDisplay">0</div>
+  <p>分</p>
+  <p style="margin:20px 0; color:#aaa;">继续进化吧，小母狗</p>
+  <button class="btn" onclick="goTo(5)">返回主界面</button>
+</div>
+
+<script>
+// ========== 105条任务 ==========
+const tasks = [
+  "脱光全身跪在镜子前，双手撑地磕头10下，每磕一次大声说“我是贱货母狗”，录完整视频上传。",
+  "用皮筋或绳子紧紧勒住奶头，直到发紫发痛，对着镜子揉捏拍打5分钟，拍特写照片上传。",
+  "憋尿到极限后，跪着把尿液全部尿在自己脸上，用手机自拍过程视频上传。",
+  "用夹子夹住阴蒂，跪着自慰到高潮两次，高潮时大声叫“主人请惩罚我”，录视频上传。",
+  "把口红涂满整个脸和胸口，写成“贱狗”字样，对着镜子磕头20下，拍照片上传。",
+  "用牙刷用力刷洗阴蒂和尿道口5分钟，直到刺痛，录特写视频上传。",
+  "跪着把两根手指插进阴道，用力抽插并抽打自己屁股30下，录视频上传。",
+  "憋尿后用丝袜堵住阴道口，继续憋到实在忍不住再释放，拍释放瞬间照片上传。",
+  "用冰冰块摩擦奶头和阴蒂直到麻木疼痛，然后立即用热水烫一下，录过程视频上传。",
+  "脱光跪在阳台或窗边（注意安全），露出全身磕头15下，拍侧身照片上传。",
+  "用夹子夹住两边奶头和阴蒂，跪着爬行一圈，边爬边说“我是尿骚母狗”，录视频上传。",
+  "把牙膏挤在阴蒂上用力揉搓5分钟，感受刺痛，拍特写照片上传。",
+  "憋尿到极限后，跪着把尿液尿进自己嘴里，吞下一部分，录视频上传。",
+  "用皮筋反复弹打阴蒂50下，直到红肿，录视频上传。",
+  "跪着把内裤塞进嘴里，双手撑地磕头30下，拍全过程视频上传。",
+  "用夹子夹住阴唇拉开，用力抽打阴部20下，拍特写照片上传。",
+  "自慰时把手指深深插入阴道和肛门同时抽插，直到高潮，录视频上传。",
+  "用红绳紧紧勒住乳房根部，直到发紫，对着镜子展示5分钟，拍照片上传。",
+  "憋尿后在厕所地板上跪着释放，用舌头舔干净地板上的尿液，录视频上传。",
+  "用牙刷刷洗肛门内外5分钟，直到刺痛，录特写视频上传。",
+  "脱光跪着，用鞋底或手掌连续抽打自己屁股50下，直到红肿，录视频上传。",
+  "把口红写在小腹上“请操我”，跪着磕头并自慰到高潮，录视频上传。",
+  "用冰水浇在乳头和阴蒂上，再立即用热毛巾烫，反复3次，录过程视频上传。",
+  "憋尿到极限后，用手指撑开阴道口，把尿液直接尿进阴道里，拍照片上传。",
+  "用夹子夹住舌头，跪着说10句自我羞辱的话，录视频上传。",
+  "跪着把两根胡萝卜同时插入阴道和肛门，用力抽插10分钟，录视频上传。",
+  "用皮筋弹打奶头100下，直到红肿疼痛，拍特写照片上传。",
+  "憋尿后跪着把尿液全部涂抹在自己脸上和胸口，拍照片上传。",
+  "用夹子夹住阴蒂，跪着爬行并大声叫“我是发情母狗”，录视频上传。",
+  "脱光跪在地上，用力抽打自己阴部30下，直到刺痛，录视频上传。",
+  "用牙膏涂满阴道口和阴蒂，用力摩擦5分钟，拍特写照片上传。",
+  "憋尿到极限后，跪着把尿液尿在自己头发上，录视频上传。",
+  "用绳子勒紧大腿根部，跪着自慰到高潮三次，录视频上传。",
+  "把内裤塞进阴道，跪着磕头20下，再拔出来闻并舔，录视频上传。",
+  "用冰冰块塞进阴道5分钟，取出后立即用热水烫阴部，录过程视频上传。",
+  "跪着把手指深深插入肛门，用力抽插并抽打屁股40下，录视频上传。",
+  "用夹子夹住两边奶头，对着镜子用力拉扯5分钟，拍照片上传。",
+  "憋尿后跪着双手把腿扒开把尿液尿进杯子里，录视频上传。",
+  "用牙刷刷洗整个阴部包括尿道口，直到红肿，录特写视频上传。",
+  "脱光跪着，用口红在胸口写“贱狗求操”，磕头15下，拍照片上传。",
+  "用皮筋反复弹打阴蒂直到无法忍受，录视频上传。",
+  "跪着把两根手指插进阴道，同时用另一只手抽打奶头50下，录视频上传。",
+  "憋尿到极限后，跪着把尿液尿在自己脚上并舔干净，录视频上传。",
+  "用夹子夹住阴唇，用力拉开并抽打阴部20下，拍特写照片上传。",
+  "用冰水浇全身后立即用热毛巾摩擦敏感部位，反复3次，录视频上传。",
+  "跪着把胡萝卜插入肛门，用力抽插并自慰到高潮，录视频上传。",
+  "用红绳勒紧乳房，跪着磕头30下，拍全过程视频上传。",
+  "憋尿后用丝袜堵住尿道口继续憋5分钟再释放，拍释放照片上传。",
+  "用牙膏涂在奶头上用力揉搓到刺痛，拍特写照片上传。",
+  "脱光跪着，双手撑地，用鞋底抽打自己屁股60下，录视频上传。",
+  "用夹子夹住阴蒂和奶头，跪着说20句羞辱自己的话，录视频上传。",
+  "跪着把内裤塞进嘴里，同时用手指插进阴道抽插到高潮，录视频上传。",
+  "憋尿到极限后，跪着把尿液全部尿在自己小腹上，拍照片上传。",
+  "用冰冰块摩擦肛门内外5分钟，录特写视频上传。",
+  "用皮筋弹打两边奶头各50下，直到红肿，拍照片上传。",
+  "跪着把两根手指同时插入阴道和肛门，用力抽插10分钟，录视频上传。",
+  "用口红在脸上写“尿贱母狗”，跪着磕头25下，拍照片上传。",
+  "憋尿后跪着把尿液尿进自己嘴里并含住1分钟再吞下，录视频上传。",
+  "用牙刷用力刷洗阴蒂直到刺痛难忍，录特写视频上传。",
+  "脱光跪着，用夹子夹住舌头和奶头，展示5分钟，拍照片上传。",
+  "用热水和冰水交替浇在阴部，反复5次，录过程视频上传。",
+  "跪着把胡萝卜深深插入阴道，用力抽插并抽打屁股30下，录视频上传。",
+  "用绳子勒紧阴部，跪着自慰到高潮两次，录视频上传。",
+  "憋尿到极限后，跪着把尿液尿在自己胸口并揉搓，拍照片上传。",
+  "用皮筋反复弹打阴蒂80下，录视频上传。",
+  "跪着把手指插进肛门，同时用另一只手用力拉扯奶头，录视频上传。",
+  "用牙膏涂满整个阴部，用力摩擦到刺痛，拍特写照片上传。",
+  "脱光跪在窗边（注意安全），露出全身磕头20下，拍侧身视频上传。",
+  "用夹子夹住两边阴唇拉开，对着镜子展示并抽打10下，录视频上传。",
+  "憋尿后跪着把尿液全部涂在脸上，拍照片上传。",
+  "用冰冰块塞进肛门5分钟，取出后立即用热水烫，录过程视频上传。",
+  "跪着把两根手指插进阴道，用力抽插并大声叫“请惩罚贱货”，录视频上传。",
+  "用红绳勒紧乳房根部直到发紫，展示并拍特写照片上传。",
+  "用牙刷刷洗尿道口和阴蒂5分钟，录特写视频上传。",
+  "脱光跪着，用鞋底连续抽打阴部25下，录视频上传。",
+  "憋尿到极限后，跪着把尿液尿在自己头发和脸上，录视频上传。",
+  "用夹子夹住奶头，跪着爬行并自慰到高潮，录视频上传。",
+  "用口红在小腹写“求操求虐”，跪着磕头15下，拍照片上传。",
+  "用皮筋弹打奶头和阴蒂各40下，拍特写照片上传。",
+  "跪着把内裤塞进阴道，用力抽插后拔出来舔干净，录视频上传。",
+  "用冰水浇在全身敏感部位，再立即用热毛巾摩擦，录视频上传。",
+  "憋尿后跪着把尿液尿进杯子，分三次喝完，录视频上传。",
+  "用夹子夹住阴蒂，用力拉扯5分钟，录特写视频上传。",
+  "跪着把胡萝卜插入肛门，同时用手指插阴道抽插到高潮，录视频上传。",
+  "用牙膏涂在肛门和阴蒂上，用力摩擦到刺痛，拍照片上传。",
+  "脱光跪着，双手撑地磕头40下，每一下都说“我是下贱母狗”，录视频上传。",
+  "用绳子勒紧大腿和阴部，跪着自慰10分钟，录视频上传。",
+  "憋尿到极限后，跪着把尿液尿在自己脚上并全部舔干净，录视频上传。",
+  "用皮筋反复弹打阴部直到红肿，录视频上传。",
+  "跪着把两根手指深深插入肛门，用力抽插并抽打屁股50下，录视频上传。",
+  "用夹子夹住两边奶头和舌头，对着镜子展示并说话，录视频上传。",
+  "用冰冰块摩擦整个阴部5分钟，拍特写照片上传。",
+  "脱光跪着，用口红在胸口写“请虐我”，磕头20下，拍照片上传。",
+  "憋尿后用手指撑开阴道，把尿液直接尿进去，拍过程照片上传。",
+  "用牙刷刷洗整个阴部和肛门，直到刺痛，录特写视频上传。",
+  "跪着把胡萝卜同时插入阴道和肛门，用力抽插并高潮，录视频上传。",
+  "用红绳勒紧乳房和阴部，跪着爬行一圈，录视频上传。",
+  "用皮筋弹打奶头100下，直到无法忍受，拍照片上传。",
+  "憋尿到极限后，跪着把尿液全部尿在自己脸上并揉搓，录视频上传。",
+  "脱光跪在镜子前，用力抽打自己屁股和阴部各30下，最后磕头10下并说“我是永远的贱母狗”，录完整视频上传。",
+  "夜间到公园偏僻角落脱光下半身，憋尿到极限后就地释放，拍释放瞬间照片上传。",
+  "穿短裙无内裤走到人少小巷，当街用手自慰到湿透，拍湿内裤特写照上传。",
+  "在停车场角落跪着磕头10下后，把尿液尿在自己手上并涂脸，拍照片上传。",
+  "憋尿后走到天台边缘（注意安全），脱光上身露出奶头，拍侧身照上传。",
+  "在夜间小区绿化带脱光，用夹子夹住阴蒂自慰到高潮，录短视频上传。"
+];
+
+// ========== 状态管理 ==========
+let currentPage = 1;
+let playerName = "";
+let playerContact = "";
+let currentTask = "";
+let selectedFile = null;
+
+// 从 localStorage 恢复进度
+function loadProgress() {
+  const saved = localStorage.getItem("bitchContractProgress");
+  if (saved) {
+    const data = JSON.parse(saved);
+    currentPage = data.page || 1;
+    playerName = data.name || "";
+    playerContact = data.contact || "";
+    currentTask = data.task || "";
+  }
+}
+
+function saveProgress() {
+  localStorage.setItem("bitchContractProgress", JSON.stringify({
+    page: currentPage,
+    name: playerName,
+    contact: playerContact,
+    task: currentTask
+  }));
+}
+
+function goTo(page) {
+  // 隐藏所有页面
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+  document.getElementById("page" + page).classList.add("active");
+
+  // 背景切换
+  if (page === 4) {
+    document.getElementById("darkBg").classList.add("hidden");
+    document.getElementById("whiteBg").classList.remove("hidden");
+  } else {
+    document.getElementById("darkBg").classList.remove("hidden");
+    document.getElementById("whiteBg").classList.add("hidden");
+  }
+
+  currentPage = page;
+  saveProgress();
+
+  // 特殊处理
+  if (page === 4) {
+    document.getElementById("playerName").value = playerName;
+    document.getElementById("playerContact").value = playerContact;
+  }
+  if (page === 6 && currentTask) {
+    document.getElementById("taskText").textContent = currentTask;
+  }
+}
+
+// 签署验证
+function submitSign() {
+  const name = document.getElementById("playerName").value.trim();
+  const contact = document.getElementById("playerContact").value.trim();
+
+  let valid = true;
+
+  // 名字必须是文字（至少有一个汉字或字母）
+  if (!name || !/[\u4e00-\u9fa5a-zA-Z]/.test(name)) {
+    document.getElementById("nameError").style.display = "block";
+    valid = false;
+  } else {
+    document.getElementById("nameError").style.display = "none";
+  }
+
+  // 联系方式必须是纯数字且 ≥8 位
+  if (!/^\d{8,}$/.test(contact)) {
+    document.getElementById("contactError").style.display = "block";
+    valid = false;
+  } else {
+    document.getElementById("contactError").style.display = "none";
+  }
+
+  if (!valid) return;
+
+  playerName = name;
+  playerContact = contact;
+  saveProgress();
+  goTo(5);
+}
+
+// 随机任务
+function getRandomTask() {
+  const idx = Math.floor(Math.random() * tasks.length);
+  currentTask = (idx + 1) + ". " + tasks[idx];
+  selectedFile = null;
+  document.getElementById("fileInput").value = "";
+  document.getElementById("fileName").textContent = "";
+  document.getElementById("uploadBtn").disabled = true;
+  saveProgress();
+  goTo(6);
+}
+
+// 文件选择
+document.getElementById("fileInput").addEventListener("change", function(e) {
+  selectedFile = e.target.files[0];
+  if (selectedFile) {
+    document.getElementById("fileName").textContent = "已选择：" + selectedFile.name + " (" + (selectedFile.size / 1024 / 1024).toFixed(2) + " MB)";
+    document.getElementById("uploadBtn").disabled = false;
+  } else {
+    document.getElementById("fileName").textContent = "";
+    document.getElementById("uploadBtn").disabled = true;
+  }
+});
+
+// 上传到 Basin
+function uploadTask() {
+  if (!selectedFile || !currentTask) {
+    alert("请先选择文件并领取任务");
+    return;
+  }
+
+  const btn = document.getElementById("uploadBtn");
+  btn.disabled = true;
+  btn.textContent = "上传中，请稍候...";
+
+  const formData = new FormData();
+  formData.append("name", playerName);
+  formData.append("contact", playerContact);
+  formData.append("task", currentTask);
+  formData.append("file", selectedFile);
+  formData.append("timestamp", new Date().toLocaleString());
+
+  // 提交到你的 Basin 表单
+  fetch("https://usebasin.com/f/b0fe1f00c0a8", {
+    method: "POST",
+    body: formData
+  })
+  .then(res => {
+    // Basin 通常返回 200 或 302，只要不是网络错误就认为成功
+    const score = Math.floor(Math.random() * 100) + 1;
+    document.getElementById("scoreDisplay").textContent = score;
+
+    // 清除当前任务进度
+    currentTask = "";
+    selectedFile = null;
+    saveProgress();
+
+    goTo(7);
+  })
+  .catch(err => {
+    console.error(err);
+    alert("上传失败，请检查网络后重试");
+    btn.disabled = false;
+    btn.textContent = "上传并完成任务";
+  });
+}
+
+// 初始化
+loadProgress();
+if (currentPage > 1) {
+  // 如果有未完成的任务，优先回到任务页
+  if (currentTask && currentPage === 6) {
+    goTo(6);
+  } else {
+    goTo(currentPage);
+  }
+} else {
+  goTo(1);
+}
+</script>
+</body>
+</html>
